@@ -42,7 +42,7 @@ export const fetchData = async (request: Request, response: Response) => {
     let signature = {
       type: 'RsaSignature2018',
       created: moment().format(),
-      creator: 'https://' + domain + '/translator/v1/public.key',
+      creator: 'https://' + domain + '/digitransit/translator/v2/public.key',
     };
 
     return response.status(200).send({

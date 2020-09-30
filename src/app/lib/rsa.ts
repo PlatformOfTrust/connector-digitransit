@@ -6,6 +6,7 @@ import request from 'request';
 import { logger } from '../../logger';
 import { HttpError } from '../../types';
 import { Response } from 'express-serve-static-core';
+import fetch from 'node-fetch';
 
 /**
  * RSA library.
@@ -130,14 +131,29 @@ export const generateSignature = (body: any, key?: string) => {
  * @return {Boolean}
  *   True if signature is valid, false otherwise.
  */
-export const verifySignature = (body: string, signature: string, publicKey: any) => {
-  // Initialize verifier.
-  const verifier = crypto.createVerify('sha256');
+export const verifySignature = async (body: string, signature: string, publicKey: any) => {
+  try {
+    const response = await fetch(publicKey, {
+      headers: {
+        'Accept': 'text/plain',
+      },
+      method: 'GET',
+    });
+    if (response.status !== 400) {
+      const content = await response.text().then(publicKeyRecieved => {
+        // Initialize verifier.
+        const verifier = crypto.createVerify('sha256');
 
-  // Update verifier.
-  verifier.update(stringifyBody(body));
+        // Update verifier.
+        verifier.update(stringifyBody(body));
 
-  // Verify base64 encoded SHA256 signature.
-  return verifier.verify(publicKey, signature, 'base64')
+        // Verifies
+        return verifier.verify(publicKeyRecieved, signature, 'base64');
+      });
+    }
+  }
+  catch (err) {
+    logger.log('error', err.message);
+  }
 };
 

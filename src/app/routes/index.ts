@@ -14,12 +14,12 @@ export const appEndpoints = (app: Express, passport: PassportStatic) => {
   app.options('*', cors());
 
   /** Translator endpoints. */
-  app.use('/translator/', v2Endpoints(passport));
+  app.use('*/translator/', v2Endpoints(passport));
 
   /** Default endpoint. */
   app.use('', function (req, res) {
     return res.status(404).json({
-      message: 'Signspace Connector - invalid endpoint.',
+      message: 'Digitransit Connector - invalid endpoint.',
     });
   });
 };

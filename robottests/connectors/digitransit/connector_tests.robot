@@ -3,21 +3,18 @@ Documentation     Digitraffic Live Trains API - MQTT
 Library           Collections
 Library           DateTime
 Library           PoTLib
-Library           REST         ${CONNECTOR_URL}
+Library           REST         ${API_URL}
 
 *** Variables ***
 ${LOCAL_TZ}                  +02:00
-${TEST_ENV}                  sandbox
+${TEST_ENV}                  test
 ${API_URL}                   https://api-${TEST_ENV}.oftrust.net
 ${API_PATH}                  /broker/v1/fetch-data-product
 ${CONNECTOR_URL}             http://localhost:8080
-${CONNECTOR_PATH}            /translator/v2/fetch
-# ${APP_TOKEN}                 %{POT_APP_ACCESS_TOKEN}
-${APP_TOKEN}                 test
-# ${CLIENT_SECRET}             %{POT_CLIENT_SECRET}
-${CLIENT_SECRET}             test
-# ${PRODUCT_CODE}              %{POT_PRODUCT_CODE}
-${PRODUCT_CODE}              test
+${CONNECTOR_PATH}            /digitransit/translator/v2/fetch
+${APP_TOKEN}                 %{POT_APP_ACCESS_TOKEN}
+${CLIENT_SECRET}             %{POT_CLIENT_SECRET}
+${PRODUCT_CODE}              digitransit-4-test
 ${OPERATOR_ID}               0022
 ${OPERATOR_TYPE}             Organization
 
@@ -42,7 +39,7 @@ Fetch Data Product
     ${signature}    Calculate PoT Signature          ${body}    ${CLIENT_SECRET}
     Log             ${signature}
     Set Headers     {"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}
-    POST            ${CONNECTOR_PATH}                      ${body}
+    POST            ${API_PATH}                      ${body}
     Output schema   response body
 
 Get Body

@@ -65,7 +65,7 @@ app.use((error: HttpError, request: Request, response: Response, next: NextFunct
   response.status(error.status || 500).send({
     error: {
       status: error.status || 500,
-      message
+      message: error.message
     }
   });
 });
@@ -129,12 +129,6 @@ if (process.env.BROADCAST === "BROADCAST") {
     }
 
   });
-
-  // if (process.env.BROADCAST_DESTINATION === "CONSOLE" || "AZURE") {
-  //   console.log(`Starting %s broadcast %s`, process.env.BROADCAST_DESTINATION, process.env.BROADCAST_DESTINATION === "AZURE" ? "to URL - " + process.env.AZURE_URL : "");
-  // } else {
-  //   console.log("Please specify broadcast destination: CONSOLE or AZURE");
-  // }
 
   const url = process.env.AZURE_URL ? process.env.AZURE_URL : "";
   broadcastingMqttClient.on("message", (topic, message) => {

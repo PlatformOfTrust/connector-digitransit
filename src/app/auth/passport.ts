@@ -5,6 +5,7 @@ import * as cache from '../cache';
 import * as rsa from '../lib/rsa';
 import SignatureStrategy from './strategies/signature';
 import { Request } from 'express-serve-static-core';
+import { publicKeyURLs } from '../../config/definitions/pot';
 
 /**
  * Passport authentication configurations.
@@ -15,6 +16,7 @@ import { Request } from 'express-serve-static-core';
 /** Import Platform of Trust definitions. */
 import { supportedHeaders } from '../../config/definitions/request';
 import { PassportStatic } from 'passport';
+import express from 'express';
 
 /**
  * Extracts identity id from token.
@@ -48,12 +50,11 @@ const passportInit = (passport: PassportStatic) => {
             /** Signature validation */
             let verified = false;
             let environment;
-            let publicKeys = (cache.getDocs('publicKeys') || []).sort((a: any, b: any) => (a.priority > b.priority) ? 1 : -1);
+            let publicKeys = (publicKeyURLs || []).sort((a: any, b: any) => (a.priority > b.priority) ? 1 : -1);
 
-            // Verify payload and signature against Platform of Trust public key.
             for (let i = 0; i < publicKeys.length; i++) {
                 if (verified) continue;
-                if (rsa.verifySignature(request.body, signature, publicKeys[i].key)) {
+                if (rsa.verifySignature(request.body, signature, publicKeys[i].url)) {
                     verified = true;
                     environment = publicKeys[i].env;
                 }
