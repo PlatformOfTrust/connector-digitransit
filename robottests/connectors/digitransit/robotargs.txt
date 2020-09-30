@@ -1,0 +1,3 @@
+--pythonpath lib
+--outputdir connectors/digitransit/result
+connectors/digitransit/connector_tests.robot

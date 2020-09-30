@@ -1,0 +1,1360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2.2 (Python 3.8.5 on darwin)" generated="20200929 16:55:11.403" rpa="false">
+<suite id="s1" name="Connector Tests" source="/Users/daniilsmirnov/digitransit-connector/robottests/connectors/digitransit/connector_tests.robot">
+<test id="s1-t1" name="fetch, 200">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:11.995" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:11.995" endtime="20200929 16:55:11.995"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:11.996" level="INFO">${now} = 2020-09-29T13:55:11+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:11.996" endtime="20200929 16:55:11.996"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:11.996" endtime="20200929 16:55:11.996"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:11.996" endtime="20200929 16:55:11.997"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:11.997" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:11+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:11.997" endtime="20200929 16:55:11.997"></status>
+</kw>
+<msg timestamp="20200929 16:55:11.998" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:11+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:11.994" endtime="20200929 16:55:11.998"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:11.999" level="INFO">${signature} = FXHn7cz8F6N4rqzeDtoUarXukhSS267fTuIRaIiKVXs=</msg>
+<status status="PASS" starttime="20200929 16:55:11.998" endtime="20200929 16:55:11.999"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:11.999" level="INFO">FXHn7cz8F6N4rqzeDtoUarXukhSS267fTuIRaIiKVXs=</msg>
+<status status="PASS" starttime="20200929 16:55:11.999" endtime="20200929 16:55:11.999"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:11.999" endtime="20200929 16:55:12.000"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.001" endtime="20200929 16:55:12.245"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.246" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.246" endtime="20200929 16:55:12.264"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:11.998" endtime="20200929 16:55:12.265"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.268" level="FAIL">422 is not one of [200]
+
+Failed validating 'enum' in schema:
+    {'enum': [200], 'type': 'integer'}
+
+On instance:
+    422</msg>
+<status status="FAIL" starttime="20200929 16:55:12.265" endtime="20200929 16:55:12.268"></status>
+</kw>
+<tags>
+<tag>bug-0001</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:11.993" endtime="20200929 16:55:12.269" critical="yes">422 is not one of [200]
+
+Failed validating 'enum' in schema:
+    {'enum': [200], 'type': 'integer'}
+
+On instance:
+    422</status>
+</test>
+<test id="s1-t2" name="fetch, 422, Missing data for timestamp required field">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.271" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.270" endtime="20200929 16:55:12.271"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.271" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.271" endtime="20200929 16:55:12.271"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.271" endtime="20200929 16:55:12.271"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.272" endtime="20200929 16:55:12.272"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.272" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.272" endtime="20200929 16:55:12.272"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.273" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.270" endtime="20200929 16:55:12.273"></status>
+</kw>
+<kw name="Pop From Dictionary" library="Collections">
+<doc>Pops the given ``key`` from the ``dictionary`` and returns its value.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.273" endtime="20200929 16:55:12.273"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.274" level="INFO">${signature} = 9hy731GI+PtrUGG5daiVMoqSRg3+aueiaUroq0VvqoE=</msg>
+<status status="PASS" starttime="20200929 16:55:12.274" endtime="20200929 16:55:12.275"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.275" level="INFO">9hy731GI+PtrUGG5daiVMoqSRg3+aueiaUroq0VvqoE=</msg>
+<status status="PASS" starttime="20200929 16:55:12.275" endtime="20200929 16:55:12.275"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.275" endtime="20200929 16:55:12.276"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.276" endtime="20200929 16:55:12.401"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.401" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "object",
+                    "properties": {
+                        "timestamp": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "Missing data for required field."
+                            ]
+                        }
+                    },
+                    "required": [
+                        "timestamp"
+                    ]
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.401" endtime="20200929 16:55:12.402"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:12.273" endtime="20200929 16:55:12.403"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.403" endtime="20200929 16:55:12.403"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response body error status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.403" endtime="20200929 16:55:12.404"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message timestamp 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.404" endtime="20200929 16:55:12.405"></status>
+</kw>
+<tags>
+<tag>bug-0001</tag>
+</tags>
+<status status="PASS" starttime="20200929 16:55:12.269" endtime="20200929 16:55:12.405" critical="yes"></status>
+</test>
+<test id="s1-t3" name="fetch, 422, Missing data for parameters required field">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.407" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.406" endtime="20200929 16:55:12.407"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.407" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.407" endtime="20200929 16:55:12.407"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.407" endtime="20200929 16:55:12.408"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.408" endtime="20200929 16:55:12.408"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.408" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.408" endtime="20200929 16:55:12.408"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.409" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.406" endtime="20200929 16:55:12.409"></status>
+</kw>
+<kw name="Pop From Dictionary" library="Collections">
+<doc>Pops the given ``key`` from the ``dictionary`` and returns its value.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>parameters</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.409" endtime="20200929 16:55:12.409"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.410" level="INFO">${signature} = LyJ+6JYHLc2K8jvYT6uZ2M4whdE34oJh4O/1tMc+PL4=</msg>
+<status status="PASS" starttime="20200929 16:55:12.410" endtime="20200929 16:55:12.410"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.411" level="INFO">LyJ+6JYHLc2K8jvYT6uZ2M4whdE34oJh4O/1tMc+PL4=</msg>
+<status status="PASS" starttime="20200929 16:55:12.410" endtime="20200929 16:55:12.411"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.411" endtime="20200929 16:55:12.411"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.411" endtime="20200929 16:55:12.560"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.560" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.560" endtime="20200929 16:55:12.561"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:12.409" endtime="20200929 16:55:12.561"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.561" endtime="20200929 16:55:12.562"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response body error status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.562" endtime="20200929 16:55:12.563"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message parameters 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.563" level="INFO">
+
+Property 'parameters' does not exist in:
+"Could not validate app token."</msg>
+<msg timestamp="20200929 16:55:12.563" level="FAIL">
+Expected property 'response body error message parameters 0' was not found.</msg>
+<status status="FAIL" starttime="20200929 16:55:12.563" endtime="20200929 16:55:12.563"></status>
+</kw>
+<tags>
+<tag>bug-0002</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:12.405" endtime="20200929 16:55:12.564" critical="yes">
+Expected property 'response body error message parameters 0' was not found.</status>
+</test>
+<test id="s1-t4" name="fetch, 422, Missing data for operator required field">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.565" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.565" endtime="20200929 16:55:12.565"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.565" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.565" endtime="20200929 16:55:12.566"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.566" endtime="20200929 16:55:12.566"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.566" endtime="20200929 16:55:12.567"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.567" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.567" endtime="20200929 16:55:12.567"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.568" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.564" endtime="20200929 16:55:12.568"></status>
+</kw>
+<kw name="Pop From Dictionary" library="Collections">
+<doc>Pops the given ``key`` from the ``dictionary`` and returns its value.</doc>
+<arguments>
+<arg>${body["parameters"]}</arg>
+<arg>operator</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.568" endtime="20200929 16:55:12.568"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.569" level="INFO">${signature} = uEWFIe7SEvrGSO4D1gveEBBVoH1abtX9ZqWCHT+rjpI=</msg>
+<status status="PASS" starttime="20200929 16:55:12.569" endtime="20200929 16:55:12.569"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.569" level="INFO">uEWFIe7SEvrGSO4D1gveEBBVoH1abtX9ZqWCHT+rjpI=</msg>
+<status status="PASS" starttime="20200929 16:55:12.569" endtime="20200929 16:55:12.569"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.570" endtime="20200929 16:55:12.570"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.570" endtime="20200929 16:55:12.691"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.692" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.691" endtime="20200929 16:55:12.692"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:12.568" endtime="20200929 16:55:12.692"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.692" endtime="20200929 16:55:12.693"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response body error status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.693" endtime="20200929 16:55:12.694"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message parameters.operator 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.694" level="INFO">
+
+Property 'parameters.operator' does not exist in:
+"Could not validate app token."</msg>
+<msg timestamp="20200929 16:55:12.694" level="FAIL">
+Expected property 'response body error message parameters.operator 0' was not found.</msg>
+<status status="FAIL" starttime="20200929 16:55:12.694" endtime="20200929 16:55:12.694"></status>
+</kw>
+<tags>
+<tag>bug-0003</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:12.564" endtime="20200929 16:55:12.695" critical="yes">
+Expected property 'response body error message parameters.operator 0' was not found.</status>
+</test>
+<test id="s1-t5" name="fetch, 422, Missing data for vehicle required field">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.696" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.696" endtime="20200929 16:55:12.696"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.697" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.697" endtime="20200929 16:55:12.697"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.697" endtime="20200929 16:55:12.697"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.697" endtime="20200929 16:55:12.698"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.698" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.698" endtime="20200929 16:55:12.698"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.698" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.696" endtime="20200929 16:55:12.698"></status>
+</kw>
+<kw name="Pop From Dictionary" library="Collections">
+<doc>Pops the given ``key`` from the ``dictionary`` and returns its value.</doc>
+<arguments>
+<arg>${body["parameters"]}</arg>
+<arg>vehicle</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.698" endtime="20200929 16:55:12.699"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.700" level="INFO">${signature} = cUZlKE8jIhTgvNG8tnreo2JtDunU7kJ757i7SpPJYR8=</msg>
+<status status="PASS" starttime="20200929 16:55:12.700" endtime="20200929 16:55:12.700"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.700" level="INFO">cUZlKE8jIhTgvNG8tnreo2JtDunU7kJ757i7SpPJYR8=</msg>
+<status status="PASS" starttime="20200929 16:55:12.700" endtime="20200929 16:55:12.700"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.700" endtime="20200929 16:55:12.701"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.701" endtime="20200929 16:55:12.843"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.844" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.844" endtime="20200929 16:55:12.845"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:12.699" endtime="20200929 16:55:12.846"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.846" endtime="20200929 16:55:12.847"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response body error status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.847" endtime="20200929 16:55:12.848"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message parameters.vehicle 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.848" level="INFO">
+
+Property 'parameters.vehicle' does not exist in:
+"Could not validate app token."</msg>
+<msg timestamp="20200929 16:55:12.849" level="FAIL">
+Expected property 'response body error message parameters.vehicle 0' was not found.</msg>
+<status status="FAIL" starttime="20200929 16:55:12.848" endtime="20200929 16:55:12.849"></status>
+</kw>
+<tags>
+<tag>bug-0004</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:12.695" endtime="20200929 16:55:12.849" critical="yes">
+Expected property 'response body error message parameters.vehicle 0' was not found.</status>
+</test>
+<test id="s1-t6" name="fetch, 422, Empty operator">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.852" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.851" endtime="20200929 16:55:12.852"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.852" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.852" endtime="20200929 16:55:12.853"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.853" endtime="20200929 16:55:12.853"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.853" endtime="20200929 16:55:12.853"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.854" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.853" endtime="20200929 16:55:12.854"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.854" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.851" endtime="20200929 16:55:12.854"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body["parameters"]}</arg>
+<arg>operator=@{EMPTY}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.855" endtime="20200929 16:55:12.855"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.856" level="INFO">${signature} = lcs5OF8S3qXv8yUZSN66aYloPHe46jaP9s0zl4Srv3I=</msg>
+<status status="PASS" starttime="20200929 16:55:12.856" endtime="20200929 16:55:12.856"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.857" level="INFO">lcs5OF8S3qXv8yUZSN66aYloPHe46jaP9s0zl4Srv3I=</msg>
+<status status="PASS" starttime="20200929 16:55:12.856" endtime="20200929 16:55:12.857"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.857" endtime="20200929 16:55:12.857"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.857" endtime="20200929 16:55:12.988"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.989" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:12.988" endtime="20200929 16:55:12.990"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:12.855" endtime="20200929 16:55:12.990"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.990" endtime="20200929 16:55:12.991"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message parameters.operator.idLocal 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<msg timestamp="20200929 16:55:12.992" level="INFO">
+
+Property 'parameters.operator.idLocal' does not exist in:
+"Could not validate app token."</msg>
+<msg timestamp="20200929 16:55:12.992" level="FAIL">
+Expected property 'response body error message parameters.operator.idLocal 0' was not found.</msg>
+<status status="FAIL" starttime="20200929 16:55:12.992" endtime="20200929 16:55:12.993"></status>
+</kw>
+<tags>
+<tag>bug-0005</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:12.850" endtime="20200929 16:55:12.993" critical="yes">
+Expected property 'response body error message parameters.operator.idLocal 0' was not found.</status>
+</test>
+<test id="s1-t7" name="fetch, 422, Empty operator">
+<kw name="Get Body">
+<assign>
+<var>${body}</var>
+</assign>
+<kw name="Copy Dictionary" library="Collections">
+<doc>Returns a copy of the given dictionary.</doc>
+<arguments>
+<arg>${BROKER_BODY}</arg>
+<arg>deepcopy=True</arg>
+</arguments>
+<assign>
+<var>${body}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.996" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}}</msg>
+<status status="PASS" starttime="20200929 16:55:12.995" endtime="20200929 16:55:12.996"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>time_zone=UTC</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%S+00:00</arg>
+</arguments>
+<assign>
+<var>${now}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.996" level="INFO">${now} = 2020-09-29T13:55:12+00:00</msg>
+<status status="PASS" starttime="20200929 16:55:12.996" endtime="20200929 16:55:12.996"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>timestamp</arg>
+<arg>${now}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.997" endtime="20200929 16:55:12.997"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.997" endtime="20200929 16:55:12.997"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<arguments>
+<arg>json.dumps(${body})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20200929 16:55:12.998" level="INFO">${json_string} = {"productCode": "daniil-test", "parameters": {"operator": {"idLocal": "0022", "@type": "Organization"}, "vehicle": {"idLocal": "00876", "@type": "Vehicle"}}, "timestamp": "2020-09-29T13:55:12+00:00"}</msg>
+<status status="PASS" starttime="20200929 16:55:12.998" endtime="20200929 16:55:12.998"></status>
+</kw>
+<msg timestamp="20200929 16:55:12.999" level="INFO">${body} = {'productCode': 'daniil-test', 'parameters': {'operator': {'idLocal': '0022', '@type': 'Organization'}, 'vehicle': {'idLocal': '00876', '@type': 'Vehicle'}}, 'timestamp': '2020-09-29T13:55:12+00:00'}</msg>
+<status status="PASS" starttime="20200929 16:55:12.994" endtime="20200929 16:55:12.999"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${body["parameters"]}</arg>
+<arg>vehicle=@{EMPTY}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:12.999" endtime="20200929 16:55:12.999"></status>
+</kw>
+<kw name="Fetch Data Product">
+<arguments>
+<arg>${body}</arg>
+</arguments>
+<kw name="Calculate Pot Signature" library="PoTLib">
+<arguments>
+<arg>${body}</arg>
+<arg>${CLIENT_SECRET}</arg>
+</arguments>
+<assign>
+<var>${signature}</var>
+</assign>
+<msg timestamp="20200929 16:55:13.001" level="INFO">${signature} = AAzIn3Xp7UP6/ti4Xh/hI6Fkld/QBYTRoIhkQRFO7jQ=</msg>
+<status status="PASS" starttime="20200929 16:55:13.000" endtime="20200929 16:55:13.001"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${signature}</arg>
+</arguments>
+<msg timestamp="20200929 16:55:13.001" level="INFO">AAzIn3Xp7UP6/ti4Xh/hI6Fkld/QBYTRoIhkQRFO7jQ=</msg>
+<status status="PASS" starttime="20200929 16:55:13.001" endtime="20200929 16:55:13.001"></status>
+</kw>
+<kw name="Set Headers" library="REST">
+<tags>
+<tag>settings</tag>
+</tags>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<arguments>
+<arg>{"x-pot-signature": "${signature}", "x-app-token": "${APP_TOKEN}"}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:13.001" endtime="20200929 16:55:13.002"></status>
+</kw>
+<kw name="Post" library="REST">
+<tags>
+<tag>http</tag>
+</tags>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<arguments>
+<arg>${API_PATH}</arg>
+<arg>${body}</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:13.002" endtime="20200929 16:55:13.212"></status>
+</kw>
+<kw name="Output Schema" library="REST">
+<tags>
+<tag>I/O</tag>
+</tags>
+<doc>*Outputs JSON Schema to terminal or a file.*</doc>
+<arguments>
+<arg>response body</arg>
+</arguments>
+<msg timestamp="20200929 16:55:13.212" level="INFO">
+{
+    "type": "object",
+    "properties": {
+        "error": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "default": 422
+                },
+                "message": {
+                    "type": "string",
+                    "default": "Could not validate app token."
+                }
+            },
+            "required": [
+                "message",
+                "status"
+            ]
+        }
+    },
+    "required": [
+        "error"
+    ]
+}</msg>
+<status status="PASS" starttime="20200929 16:55:13.212" endtime="20200929 16:55:13.213"></status>
+</kw>
+<status status="PASS" starttime="20200929 16:55:13.000" endtime="20200929 16:55:13.214"></status>
+</kw>
+<kw name="Integer" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON integer.*</doc>
+<arguments>
+<arg>response status</arg>
+<arg>422</arg>
+</arguments>
+<status status="PASS" starttime="20200929 16:55:13.214" endtime="20200929 16:55:13.215"></status>
+</kw>
+<kw name="String" library="REST">
+<tags>
+<tag>assertions</tag>
+</tags>
+<doc>*Asserts the field as JSON string.*</doc>
+<arguments>
+<arg>response body error message parameters.vehicle.idLocal 0</arg>
+<arg>Missing data for required field.</arg>
+</arguments>
+<msg timestamp="20200929 16:55:13.216" level="INFO">
+
+Property 'parameters.vehicle.idLocal' does not exist in:
+"Could not validate app token."</msg>
+<msg timestamp="20200929 16:55:13.216" level="FAIL">
+Expected property 'response body error message parameters.vehicle.idLocal 0' was not found.</msg>
+<status status="FAIL" starttime="20200929 16:55:13.215" endtime="20200929 16:55:13.217"></status>
+</kw>
+<tags>
+<tag>bug-0006</tag>
+</tags>
+<status status="FAIL" starttime="20200929 16:55:12.994" endtime="20200929 16:55:13.217" critical="yes">
+Expected property 'response body error message parameters.vehicle.idLocal 0' was not found.</status>
+</test>
+<doc>Digitraffic Live Trains API - MQTT</doc>
+<status status="FAIL" starttime="20200929 16:55:11.405" endtime="20200929 16:55:13.218"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="6">Critical Tests</stat>
+<stat pass="1" fail="6">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="1">bug-0001</stat>
+<stat pass="0" fail="1">bug-0002</stat>
+<stat pass="0" fail="1">bug-0003</stat>
+<stat pass="0" fail="1">bug-0004</stat>
+<stat pass="0" fail="1">bug-0005</stat>
+<stat pass="0" fail="1">bug-0006</stat>
+</tag>
+<suite>
+<stat pass="1" fail="6" id="s1" name="Connector Tests">Connector Tests</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200929 16:55:11.394" level="ERROR">Error in file '/Users/daniilsmirnov/digitransit-connector/robottests/connectors/digitransit/connector_tests.robot' on line 7: Non-existing setting 'https://api-external-test.oftrust.net/digitransit/translator/v2/health'.</msg>
+<msg timestamp="20200929 16:55:12.993" level="WARN">Multiple test cases with name 'fetch, 422, Empty operator' executed in test suite 'Connector Tests'.</msg>
+</errors>
+</robot>
