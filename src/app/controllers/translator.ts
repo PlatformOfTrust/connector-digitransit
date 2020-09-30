@@ -13,7 +13,21 @@ import { Request, Response } from 'express-serve-static-core';
  */
 
 /** Mandatory environment variable. */
-let domain = process.env.TRANSLATOR_DOMAIN;
+let domain = process.env.TRANSLATOR_DOMAIN || "";
+
+/** Formats domain string to a common standart */
+const domainFormated = () => {
+  const recievedDomain = domain;
+  if (recievedDomain.includes("https://")) {
+    const newDomain = recievedDomain.replace("https://", "");
+    return newDomain;
+  } else if (recievedDomain.includes("http://")) {
+    const newDomain = recievedDomain.replace("http://", "");
+    return newDomain;
+  }
+  return recievedDomain;
+}
+
 
 /** Import contextURL definitions. */
 import { contextURLs } from '../../config/definitions/pot';
@@ -42,7 +56,7 @@ export const fetchData = async (request: Request, response: Response) => {
     let signature = {
       type: 'RsaSignature2018',
       created: moment().format(),
-      creator: 'https://' + domain + '/digitransit/translator/v2/public.key',
+      creator: `https://${ domainFormated() }/digitransit/translator/v2/public.key`,
     };
 
     return response.status(200).send({
