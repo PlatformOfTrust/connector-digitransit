@@ -100,46 +100,53 @@ fetch, 422, Missing data for parameters required field
     ${body}                Get Body
     Pop From Dictionary    ${body}                              parameters
     Fetch Data Product     ${body}
-    Integer    response status                                  422
-    Integer    response body error status                       422
-    String     response body error message parameters 0         Missing data for required field.
+    Integer    response status                                  502
+    Integer    response body error status                       502
+    Integer    response body error translator_response status   422
+    String     response body error translator_response data error message parameters 0         Missing data for required field.
 
 fetch, 422, Missing data for operator required field
     [Tags]                 bug-0003
     ${body}                Get Body
     Pop From Dictionary    ${body["parameters"]}                            operator
     Fetch Data Product     ${body}
-    Integer    response status                                              422
-    Integer    response body error status                                   422
-    String     response body error message parameters.operator 0            Missing data for required field.
-    String     response body error message parameters.operator.idLocal 0    Missing data for required field.
-    String     response body error message parameters.operator.@type 0      Missing data for required field.
+    Integer    response status                                              502
+    Integer    response body error status                                   502
+    Integer    response body error translator_response status               422
+    String     response body error translator_response data error message parameters.operator 0            Missing data for required field.
+    String     response body error translator_response data error message parameters.operator.idLocal 0    Missing data for required field.
+    String     response body error translator_response data error message parameters.operator.@type 0      Missing data for required field.
 
 fetch, 422, Missing data for vehicle required field
     [Tags]                 bug-0004
     ${body}                Get Body
     Pop From Dictionary    ${body["parameters"]}                            vehicle
     Fetch Data Product     ${body}
-    Integer    response status                                              422
-    Integer    response body error status                                   422
-    String     response body error message parameters.vehicle 0             Missing data for required field.
-    String     response body error message parameters.vehicle.idLocal 0     Missing data for required field.
-    String     response body error message parameters.vehicle.@type 0       Missing data for required field.
+    Integer    response status                                              502
+    Integer    response body error status                                   502
+    Integer    response body error translator_response status               422
+    String     response body error translator_response data error message parameters.vehicle 0             Missing data for required field.
+    String     response body error translator_response data error message parameters.vehicle.idLocal 0     Missing data for required field.
+    String     response body error translator_response data error message parameters.vehicle.@type 0       Missing data for required field.
 
 fetch, 422, Empty operator
     [Tags]                 bug-0005
     ${body}                Get Body
     Set To Dictionary      ${body["parameters"]}                operator=@{EMPTY}
     Fetch Data Product     ${body}
-    Integer    response status                422
-    String     response body error message parameters.operator.idLocal 0    Missing data for required field.
-    String     response body error message parameters.operator.@type 0      Missing data for required field.
+    Integer    response status                                              502
+    Integer    response body error status                                   502
+    Integer    response body error translator_response status               422
+    String     response body error translator_response data error message parameters.operator.idLocal 0    Missing data for required field.
+    String     response body error translator_response data error message parameters.operator.@type 0      Missing data for required field.
 
 fetch, 422, Empty operator
     [Tags]                 bug-0006
     ${body}                Get Body
     Set To Dictionary      ${body["parameters"]}                vehicle=@{EMPTY}
     Fetch Data Product     ${body}
-    Integer    response status                422
-    String     response body error message parameters.vehicle.idLocal 0     Missing data for required field.
-    String     response body error message parameters.vehicle.@type 0       Missing data for required field.
+    Integer    response status                                              502
+    Integer    response body error status                                   502
+    Integer    response body error translator_response status               422
+    String     response body error translator_response data error message parameters.vehicle.idLocal 0     Missing data for required field.
+    String     response body error translator_response data error message parameters.vehicle.@type 0       Missing data for required field.
